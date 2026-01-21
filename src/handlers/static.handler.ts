@@ -9,9 +9,11 @@ const __dirname = dirname(__filename);
 
 export async function serveIndex(
   _request: FastifyRequest,
-  reply: FastifyReply
+  reply: FastifyReply,
 ) {
   const indexHtmlPath = resolve(__dirname, "../public/index.html");
   const indexHtmlContent = await readFile(indexHtmlPath);
-  reply.header("Content-Type", "text/html; charset=utf-8").send(indexHtmlContent);
+  reply
+    .header("Content-Type", "text/html; charset=utf-8")
+    .send(indexHtmlContent);
 }

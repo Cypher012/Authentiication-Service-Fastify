@@ -1,6 +1,6 @@
 import type { User } from "../db/schema.ts";
 
-export interface UserRepository {
+export interface UserInterface {
   GetUserByEmail(email: string): Promise<User | null>;
   CreateUser(email: string, passwordHash: string): Promise<User | null>;
   GetUserByID(id: string): Promise<User | null>;

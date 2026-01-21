@@ -1,4 +1,4 @@
-import type { UserRepository } from "../interfaces/user.repository.ts";
+import type { UserRepository } from "../interfaces/user.interface.ts";
 import type { JwtService } from "../services/jwt.service.ts";
 import type { User, UserResponse } from "../db/schema.ts";
 import type { BcryptService } from "../services/bcrypt.service.ts";
@@ -19,7 +19,7 @@ export class AuthControllers {
     this.bcrypt = bcrypt;
   }
 
-  async register(
+  async createUser(
     email: string,
     password: string,
   ): Promise<{ user: UserResponse; accessToken: string } | Error> {

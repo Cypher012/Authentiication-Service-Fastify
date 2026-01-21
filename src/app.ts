@@ -3,26 +3,28 @@ import Fastify from "fastify";
 import { jwtPlugin } from "./plugins/index.ts";
 import { registerRoutes } from "./routes/index.ts";
 import { env } from "./config/env.ts";
+import FastifySwaggerPlugin from "./plugins/swagger.pluggin.ts";
 
-export function buildApp() {
+export async function buildApp() {
   const app = Fastify({
-    logger: true,
+    logger: env.NODE_ENV === "production",
   });
 
+  // Swagger plugin (must be registered before routes)
+  await FastifySwaggerPlugin(app);
+
   // Register plugins
-  app.register(jwtPlugin);
+  await app.register(jwtPlugin);
 
   // Register routes
-  app.register(registerRoutes);
+  await app.register(registerRoutes);
 
   return app;
 }
 
 // Only run if this is the entry point
-const app = buildApp();
-
-app
-  .listen({ port: env.PORT, host: "0.0.0.0" })
+buildApp()
+  .then((app) => app.listen({ port: env.PORT, host: "0.0.0.0" }))
   .then(() => {
     console.log(`Server ready at http://localhost:${env.PORT}`);
   })

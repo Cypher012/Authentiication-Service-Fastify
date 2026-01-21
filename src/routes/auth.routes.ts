@@ -4,6 +4,7 @@ import { AuthControllers } from "../contollers/auth.controllers.ts";
 import { DrizzleUserRepository } from "../repositories/user.repository.ts";
 import { JwtService } from "../services/jwt.service.ts";
 import { BcryptService } from "../services/bcrypt.service.ts";
+import { signupRouteSchema, loginRouteSchema } from "../schema/auth.schema.ts";
 
 export async function authRoutes(fastify: FastifyInstance) {
   const userRepository = new DrizzleUserRepository();
@@ -20,6 +21,6 @@ export async function authRoutes(fastify: FastifyInstance) {
 
   const authHandler = new AuthHandler(authControllers);
 
-  fastify.post("/register", authHandler.register);
-  fastify.post("/login", authHandler.login);
+  fastify.post("/signup", { schema: signupRouteSchema }, authHandler.signup);
+  fastify.post("/login", { schema: loginRouteSchema }, authHandler.login);
 }
