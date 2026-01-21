@@ -9,8 +9,9 @@ export const sessions = pgTable("sessions", {
     .notNull()
     .references(() => users.id),
   refreshTokenHash: varchar("refresh_token_hash", { length: 255 }).notNull(),
-  deviceName: varchar("device_name", { length: 255 }).notNull(),
-  deviceInfo: varchar("device_info", { length: 512 }).notNull(),
+  deviceType: varchar("device_type", { length: 50 }).notNull(),
+  deviceOS: varchar("device_os", { length: 50 }).notNull(),
+  deviceBrowser: varchar("device_browser", { length: 50 }).notNull(),
   ipAddress: varchar("ip_address", { length: 45 }).notNull(),
   expiresAt: timestamp("expires_at", { withTimezone: true })
     .notNull()

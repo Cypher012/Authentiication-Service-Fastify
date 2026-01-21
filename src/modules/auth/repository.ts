@@ -1,29 +1,39 @@
-import { eq } from "drizzle-orm";
 import type { UserInterface } from "../../interfaces/user.interface.ts";
+import type { User } from "../../db/schema.ts";
+import { eq } from "drizzle-orm";
 import { db } from "../../db/index.ts";
-import { users, type User } from "../../db/schema.ts";
+import { users } from "../../db/schema.ts";
 
-export class DrizzleUserRepository implements UserInterface {
-  async CreateUser(email: string, passwordHash: string): Promise<User | null> {
+export class AuthRepository implements UserInterface {
+  async CreateUser(email: string, passwordHash: string): Promise<User | Error> {
     const [user] = await db
       .insert(users)
       .values({ email, passwordHash })
       .returning();
-    return user ?? null;
+    if (!user) {
+      return new Error("failed to create user");
+    }
+    return user;
   }
 
-  async GetUserByEmail(email: string): Promise<User | null> {
+  async GetUserByEmail(email: string): Promise<User | Error> {
     const [user] = await db
       .select()
       .from(users)
       .where(eq(users.email, email))
       .limit(1);
-    return user ?? null;
+    if (!user) {
+      return new Error("user not found");
+    }
+    return user;
   }
 
-  async GetUserByID(id: string): Promise<User | null> {
+  async GetUserByID(id: string): Promise<User | Error> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user ?? null;
+    if (!user) {
+      return new Error("user not found");
+    }
+    return user;
   }
 
   async SetUserEmailVerified(id: string): Promise<Error | null> {

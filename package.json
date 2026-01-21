@@ -28,12 +28,14 @@
     "fastify-plugin": "^5.1.0",
     "fastify-zod-openapi": "^5.5.0",
     "pg": "^8.17.1",
+    "ua-parser-js": "^2.0.8",
     "zod": "^4.3.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^25.0.3",
     "@types/pg": "^8.16.0",
+    "@types/ua-parser-js": "^0.7.39",
     "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.8",
     "fastify-tsconfig": "^3.0.0",

@@ -3,7 +3,7 @@ import type { SessionInterface } from "../../interfaces/session.interface.ts";
 import { db } from "../../db/index.ts";
 import { sessions, type Session } from "../../db/schema.ts";
 
-export class DrizzleSessionRepository implements SessionInterface {
+export class SessionRepository implements SessionInterface {
   async CreateSession(req: {
     userId: string;
     refreshTokenHash: string;

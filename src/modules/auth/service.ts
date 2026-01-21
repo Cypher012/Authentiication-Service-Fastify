@@ -1,14 +1,14 @@
-import type { UserInterface } from "../interfaces/user.interface.ts";
-import type { JwtService } from "../services/jwt.service.ts";
-import type { User, UserResponse } from "../db/schema.ts";
-import type { BcryptService } from "../services/bcrypt.service.ts";
+import type { UserInterface } from "../../interfaces/index.ts";
+import type { JwtService } from "../../services/jwt.service.ts";
+import type { User, UserResponse } from "../../db/schema.ts";
+import type { BcryptService } from "../../services/bcrypt.service.ts";
 
 function toUserResponse(user: User): UserResponse {
   const { passwordHash, ...rest } = user;
   return rest;
 }
 
-export class AuthControllers {
+export class AuthService {
   private readonly users: UserInterface;
   private readonly jwt: JwtService;
   private readonly bcrypt: BcryptService;
@@ -24,14 +24,14 @@ export class AuthControllers {
     password: string,
   ): Promise<{ user: UserResponse; accessToken: string } | Error> {
     const existing = await this.users.GetUserByEmail(email);
-    if (existing) {
+    if (!(existing instanceof Error)) {
       return new Error("email already exists");
     }
 
     const passwordHash = await this.bcrypt.hashPassword(password);
     const user = await this.users.CreateUser(email, passwordHash);
-    if (!user) {
-      return new Error("failed to create user");
+    if (user instanceof Error) {
+      return user;
     }
 
     const accessToken = this.jwt.signAccessToken({ userId: user.id });
@@ -43,7 +43,7 @@ export class AuthControllers {
     password: string,
   ): Promise<{ user: UserResponse; accessToken: string } | Error> {
     const user = await this.users.GetUserByEmail(email);
-    if (!user) {
+    if (user instanceof Error) {
       return new Error("invalid credentials");
     }
 
@@ -69,8 +69,8 @@ export class AuthControllers {
     newPassword: string,
   ): Promise<Error | null> {
     const user = await this.users.GetUserByID(userId);
-    if (!user) {
-      return new Error("user not found");
+    if (user instanceof Error) {
+      return user;
     }
 
     const valid = await this.bcrypt.comparePassword(

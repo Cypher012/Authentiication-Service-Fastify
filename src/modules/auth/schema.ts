@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { userResponseSchema } from "../db/schemas/user.schema.ts";
+import { userResponseSchema } from "../../db/schemas/user.schema.ts";
 
 export const signupRequestSchema = z.object({
   email: z.string().email(),

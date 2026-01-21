@@ -1,27 +1,21 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
-import type { AuthControllers } from "../contollers/auth.controllers.ts";
+import type { AuthService } from "./service.ts";
 import { z } from "zod";
-import type { AuthResponse } from "../schema/auth.schema.ts";
+import {
+  loginRequestSchema,
+  signupRequestSchema,
+  type AuthResponse,
+} from "./schema.ts";
 
-const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+export class AuthController {
+  private readonly authService: AuthService;
 
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-export class AuthHandler {
-  private readonly authControllers: AuthControllers;
-
-  constructor(authControllers: AuthControllers) {
-    this.authControllers = authControllers;
+  constructor(authService: AuthService) {
+    this.authService = authService;
   }
 
   signup = async (request: FastifyRequest, reply: FastifyReply) => {
-    const parsed = registerSchema.safeParse(request.body);
+    const parsed = signupRequestSchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.status(400).send({
         error: "Validation failed",
@@ -30,7 +24,7 @@ export class AuthHandler {
     }
 
     const { email, password } = parsed.data;
-    const result = await this.authControllers.createUser(email, password);
+    const result = await this.authService.createUser(email, password);
 
     if (result instanceof Error) {
       return reply.status(400).send({ error: result.message });
@@ -51,7 +45,7 @@ export class AuthHandler {
   };
 
   login = async (request: FastifyRequest, reply: FastifyReply) => {
-    const parsed = loginSchema.safeParse(request.body);
+    const parsed = loginRequestSchema.safeParse(request.body);
     if (!parsed.success) {
       return reply.status(400).send({
         error: "Validation failed",
@@ -60,7 +54,7 @@ export class AuthHandler {
     }
 
     const { email, password } = parsed.data;
-    const result = await this.authControllers.login(email, password);
+    const result = await this.authService.login(email, password);
 
     if (result instanceof Error) {
       return reply.status(401).send({ error: result.message });
