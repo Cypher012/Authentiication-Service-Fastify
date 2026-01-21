@@ -1,4 +1,4 @@
-import type { UserRepository } from "../interfaces/user.interface.ts";
+import type { UserInterface } from "../interfaces/user.interface.ts";
 import type { JwtService } from "../services/jwt.service.ts";
 import type { User, UserResponse } from "../db/schema.ts";
 import type { BcryptService } from "../services/bcrypt.service.ts";
@@ -9,11 +9,11 @@ function toUserResponse(user: User): UserResponse {
 }
 
 export class AuthControllers {
-  private readonly users: UserRepository;
+  private readonly users: UserInterface;
   private readonly jwt: JwtService;
   private readonly bcrypt: BcryptService;
 
-  constructor(users: UserRepository, jwt: JwtService, bcrypt: BcryptService) {
+  constructor(users: UserInterface, jwt: JwtService, bcrypt: BcryptService) {
     this.users = users;
     this.jwt = jwt;
     this.bcrypt = bcrypt;

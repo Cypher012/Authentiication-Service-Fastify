@@ -8,6 +8,7 @@ export const sessions = pgTable("sessions", {
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id),
+  refreshTokenHash: varchar("refresh_token_hash", { length: 255 }).notNull(),
   deviceName: varchar("device_name", { length: 255 }).notNull(),
   deviceInfo: varchar("device_info", { length: 512 }).notNull(),
   ipAddress: varchar("ip_address", { length: 45 }).notNull(),

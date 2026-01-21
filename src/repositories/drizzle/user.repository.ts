@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import type { UserInterface } from "../interfaces/user.interface.ts";
-import { db } from "../db/index.ts";
-import { users, type User } from "../db/schema.ts";
+import type { UserInterface } from "../../interfaces/user.interface.ts";
+import { db } from "../../db/index.ts";
+import { users, type User } from "../../db/schema.ts";
 
 export class DrizzleUserRepository implements UserInterface {
   async CreateUser(email: string, passwordHash: string): Promise<User | null> {

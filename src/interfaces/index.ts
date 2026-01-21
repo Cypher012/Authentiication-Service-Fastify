@@ -1,1 +1,1 @@
-export type { UserRepository } from "./user.repository.ts";
+export type { UserInterface } from "./user.interface.ts";
