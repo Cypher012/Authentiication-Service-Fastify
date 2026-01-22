@@ -6,12 +6,15 @@ import {
   signupRequestSchema,
   type AuthResponse,
 } from "./schema.ts";
+import type { SessionService } from "../session/service.ts";
 
 export class AuthController {
   private readonly authService: AuthService;
+  private readonly sessionService: SessionService;
 
-  constructor(authService: AuthService) {
+  constructor(authService: AuthService, sessionService: SessionService) {
     this.authService = authService;
+    this.sessionService = sessionService;
   }
 
   signup = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -29,6 +32,13 @@ export class AuthController {
     if (result instanceof Error) {
       return reply.status(400).send({ error: result.message });
     }
+
+    await this.sessionService.CreateSession({
+      userId: result.user.id,
+      refreshTokenHash: result.accessToken,
+      ipAddress: request.ip,
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+    });
 
     const payload: AuthResponse = {
       user: {

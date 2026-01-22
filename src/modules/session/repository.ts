@@ -4,14 +4,7 @@ import { db } from "../../db/index.ts";
 import { sessions, type Session } from "../../db/schema.ts";
 
 export class SessionRepository implements SessionInterface {
-  async CreateSession(req: {
-    userId: string;
-    refreshTokenHash: string;
-    deviceName: string;
-    deviceInfo: string;
-    ipAddress: string;
-    expiresAt: Date;
-  }): Promise<Session | Error> {
+  async CreateSession(req: Omit<Session, "id">): Promise<Session | Error> {
     const [session] = await db.insert(sessions).values(req).returning();
 
     if (!session) {

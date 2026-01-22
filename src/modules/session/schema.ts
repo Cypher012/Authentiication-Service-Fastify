@@ -1,9 +1,6 @@
 export type SessionRequestType = {
   userId: string;
   refreshTokenHash: string;
-  deviceBrowser: string;
-  deviceType: string;
-  deviceOS: string;
   ipAddress: string;
   expiresAt: Date;
 };
@@ -11,9 +8,9 @@ export type SessionRequestType = {
 export type SessionResponseType = {
   id: string;
   userId: string;
-  deviceBrowser: string;
-  deviceType: string;
-  deviceOS: string;
+  deviceBrowser: string | null;
+  deviceType: string | null;
+  deviceOS: string | null;
   ipAddress: string;
   expiresAt: Date;
   createdAt: Date;

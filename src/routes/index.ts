@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import type { FastifyInstance, FastifyRequest } from "fastify";
 import { authRoutes } from "../modules/auth/route.ts";
 import { serveIndex } from "../handlers/static.handler.ts";
 import { UAParser } from "ua-parser-js";

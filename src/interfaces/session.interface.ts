@@ -1,9 +1,8 @@
 import type { Session } from "../db/schema.ts";
-import type { SessionRequestType } from "../modules/session/schema.ts";
 
 export interface SessionInterface {
   GetSessionById(sessionId: string): Promise<Session | Error>;
-  CreateSession(req: SessionRequestType): Promise<Session | Error>;
+  CreateSession(req: Omit<Session, "id">): Promise<Session | Error>;
   ListActiveSessions(userId: string): Promise<Session[] | Error>;
   GetSessionByRefreshToken(refreshTokenHash: string): Promise<Session | Error>;
   UpdateSessionLastUsed(sessionId: string): Promise<Error | null>;
